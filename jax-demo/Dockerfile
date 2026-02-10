@@ -1,20 +1,15 @@
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:13.1.1-cudnn-runtime-ubuntu24.04
 
-COPY --from=nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 /usr/local/cuda/bin/ptxas /usr/local/cuda/b# Optimisation APT : On combine et on nettoie les listes dans la même couche
+COPY --from=nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04 /usr/local/cuda/bin/ptxas /usr/local/cuda/bin/ptxas
 
+RUN apt update
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONUNBUFFERED "yes"
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
- python3 \
- python3-pip \
- s3cmd \
- && rm -rf /var/lib/apt/lists/*
+RUN apt install -y python3 python3-pip s3cmd
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir --upgrade pip
-
 ADD requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-ADD ./src ./src
+RUN pip install -r requirements.txt --no-cache-dir
+
+ADD ./src .
