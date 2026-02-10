@@ -1,19 +1,19 @@
-# yaml-language-server: $schema=https://instadeep.aichor.ai/schema/latest/manifest.schema.json
-
 kind: AIchorManifest
 apiVersion: 0.2.2
 
 builder:
-  image: jax-demo
-  context: jax-demo # jax-demo folder
-  dockerfile: ./Dockerfile
+  image: image
+  context: smoke-test # smoke-test folder
+  dockerfile: ./build/Dockerfile
 
 spec:
   operator: jax
-  image: jax-demo
-  command: "python3 -u /app/main.py"
+  image: image
+  command: "python3 -u main.py --operator=jax --sleep=300 --tb-write=True"
+
   tensorboard:
     enabled: true
+
   types:
     worker:
       count: 1
@@ -21,3 +21,4 @@ spec:
         cpus: 1
         ramRatio: 2
         shmSizeGB: 0
+
